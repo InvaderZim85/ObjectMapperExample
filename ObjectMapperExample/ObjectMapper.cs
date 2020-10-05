@@ -10,7 +10,7 @@ namespace ObjectMapperExample
     internal static class ObjectMapper
     {
         /// <summary>
-        /// Maps two objects into one
+        /// Maps multiples objects
         /// </summary>
         /// <param name="main">The main object</param>
         /// <param name="mapObjects">The objects which should be mapped</param>
@@ -43,7 +43,6 @@ namespace ObjectMapperExample
             // object contains a property with the same name and type
             foreach (var mainProperty in mainProperties)
             {
-                Console.WriteLine($"> Property: {mainProperty.Name}");
                 // Check if the other object contains a property with the same name
                 var otherProperty = otherProperties.FirstOrDefault(f =>
                     f.Name.Equals(mainProperty.Name, StringComparison.OrdinalIgnoreCase));
@@ -62,6 +61,22 @@ namespace ObjectMapperExample
                 var otherValue = GetPropertyValue(other, otherProperty.Name);
                 mainProperty.SetValue(main, otherValue);
             }
+        }
+
+
+        /// <summary>
+        /// Creates a new object of the given type and maps the given data
+        /// </summary>
+        /// <typeparam name="T">The type of the new object</typeparam>
+        /// <param name="mapObjects">The objects which should be mapped</param>
+        /// <returns>The new type</returns>
+        public static T Map<T>(params object[] mapObjects) where T: class, new()
+        {
+            var mainObject = Activator.CreateInstance<T>();
+
+            Map(mainObject, mapObjects);
+
+            return mainObject;
         }
 
         /// <summary>

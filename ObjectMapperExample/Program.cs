@@ -26,6 +26,7 @@ namespace ObjectMapperExample
                 Birthday = new DateTime(2000, 1, 1)
             };
 
+            // Existing objects
             Console.WriteLine("Objects before mapping:");
             Console.WriteLine("Empty person");
             PrintObject(person);
@@ -48,6 +49,15 @@ namespace ObjectMapperExample
                 Birthday = DateTime.Now
             });
             PrintObject(person);
+
+            // Creates a complete new object
+            var result = ObjectMapper.Map<Person>(dbModel, new
+            {
+                Birthday = DateTime.Now
+            });
+            Console.WriteLine("Creation of new type");
+            PrintObject(result);
+
 
             Console.WriteLine("Done.");
             Console.ReadLine();
