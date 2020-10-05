@@ -35,9 +35,12 @@ namespace ObjectMapperExample
             if (other == null)
                 throw new ArgumentNullException(nameof(other));
 
+            // Get the properties of the main and the other object
             var mainProperties = main.GetType().GetProperties();
             var otherProperties = other.GetType().GetProperties();
 
+            // Iterate through every main property and check if the other
+            // object contains a property with the same name and type
             foreach (var mainProperty in mainProperties)
             {
                 // Check if the other object contains a property with the same name

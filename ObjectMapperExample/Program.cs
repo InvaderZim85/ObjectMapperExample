@@ -41,6 +41,13 @@ namespace ObjectMapperExample
             Console.WriteLine("Main object after mapping");
             PrintObject(person);
 
+            Console.WriteLine("Map of a dynamic object");
+            ObjectMapper.Map(person, new
+            {
+                Birthday = DateTime.Now
+            });
+            PrintObject(person);
+
             Console.WriteLine("Done.");
             Console.ReadLine();
         }
