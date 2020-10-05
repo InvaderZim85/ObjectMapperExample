@@ -43,6 +43,7 @@ namespace ObjectMapperExample
             // object contains a property with the same name and type
             foreach (var mainProperty in mainProperties)
             {
+                Console.WriteLine($"> Property: {mainProperty.Name}");
                 // Check if the other object contains a property with the same name
                 var otherProperty = otherProperties.FirstOrDefault(f =>
                     f.Name.Equals(mainProperty.Name, StringComparison.OrdinalIgnoreCase));
@@ -50,8 +51,10 @@ namespace ObjectMapperExample
                 if (otherProperty == null)
                     continue; // No property found, skip the rest
 
-                if (mainProperty.GetType() != otherProperty.GetType())
-                    continue; // The types are not equal, skip the rest
+                var mainType = mainProperty.PropertyType;
+                var otherType = otherProperty.PropertyType;
+                if (mainType != otherType)
+                    continue; // The properties are not equal, skip the rest
 
                 if (IgnoreProperty(otherProperty)) 
                     continue; // The property should be ignored, skip the rest

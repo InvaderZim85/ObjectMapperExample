@@ -21,6 +21,7 @@ namespace ObjectMapperExample
 
             var birthdayValue = new BirthdayValue
             {
+                Id = "100",
                 PersonId = 1,
                 Birthday = new DateTime(2000, 1, 1)
             };
@@ -96,6 +97,7 @@ namespace ObjectMapperExample
 
     internal class BirthdayValue
     {
+        public string Id { get; set; } // Test with the id
         public int PersonId { get; set; }
         public DateTime Birthday { get; set; }
     }
