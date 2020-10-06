@@ -92,7 +92,8 @@ namespace ObjectMapperExample
     internal class Person
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        [Mapping("Name")]
+        public string FirstName { get; set; }
         public DateTime Birthday { get; set; }
     }
 
@@ -102,7 +103,7 @@ namespace ObjectMapperExample
         public string Name { get; set; }
 
         [IgnoreProperty]
-        public DateTime Birthday { get; set; }
+        internal DateTime Birthday { get; set; }
     }
 
     internal class BirthdayValue

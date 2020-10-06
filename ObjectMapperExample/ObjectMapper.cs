@@ -43,9 +43,10 @@ namespace ObjectMapperExample
             // object contains a property with the same name and type
             foreach (var mainProperty in mainProperties)
             {
+                var name = MappingName(mainProperty) ?? mainProperty.Name;
                 // Check if the other object contains a property with the same name
                 var otherProperty = otherProperties.FirstOrDefault(f =>
-                    f.Name.Equals(mainProperty.Name, StringComparison.OrdinalIgnoreCase));
+                    f.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
                 
                 if (otherProperty == null)
                     continue; // No property found, skip the rest
@@ -106,6 +107,28 @@ namespace ObjectMapperExample
         {
             var attribute = Attribute.GetCustomAttribute(type, typeof(IgnorePropertyAttribute));
             return attribute != null;
+        }
+
+        /// <summary>
+        /// Gets the mapping name
+        /// </summary>
+        /// <param name="type">The type of the property</param>
+        /// <returns>The mapping name</returns>
+        private static string MappingName(MemberInfo type)
+        {
+            var attribute = type.GetCustomAttribute<MappingAttribute>();
+
+            return attribute?.Name;
+        }
+
+        private static T GetAttribute<T>(this MemberInfo type)
+        {
+            var attribute = Attribute.GetCustomAttribute(type, typeof(T));
+
+            if (attribute is T result)
+                return result;
+
+            return default;
         }
     }
 }
