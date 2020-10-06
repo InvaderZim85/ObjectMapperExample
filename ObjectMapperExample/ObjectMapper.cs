@@ -43,7 +43,10 @@ namespace ObjectMapperExample
             // object contains a property with the same name and type
             foreach (var mainProperty in mainProperties)
             {
-                var name = MappingName(mainProperty) ?? mainProperty.Name;
+                if (mainProperty.IgnoreProperty())
+                    continue; // The property should be ignored, skip the rest
+
+                var name = mainProperty.GetMappingName();
                 // Check if the other object contains a property with the same name
                 var otherProperty = otherProperties.FirstOrDefault(f =>
                     f.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
@@ -56,7 +59,7 @@ namespace ObjectMapperExample
                 if (mainType != otherType)
                     continue; // The properties are not equal, skip the rest
 
-                if (IgnoreProperty(otherProperty)) 
+                if (otherProperty.IgnoreProperty())
                     continue; // The property should be ignored, skip the rest
 
                 var otherValue = GetPropertyValue(other, otherProperty.Name);
@@ -103,9 +106,9 @@ namespace ObjectMapperExample
         /// </summary>
         /// <param name="type">The type of the property</param>
         /// <returns>true when the property should be ignored, otherwise false</returns>
-        private static bool IgnoreProperty(MemberInfo type)
+        private static bool IgnoreProperty(this MemberInfo type)
         {
-            var attribute = Attribute.GetCustomAttribute(type, typeof(IgnorePropertyAttribute));
+            var attribute = type.GetCustomAttribute<IgnorePropertyAttribute>();
             return attribute != null;
         }
 
@@ -114,21 +117,11 @@ namespace ObjectMapperExample
         /// </summary>
         /// <param name="type">The type of the property</param>
         /// <returns>The mapping name</returns>
-        private static string MappingName(MemberInfo type)
+        private static string GetMappingName(this MemberInfo type)
         {
             var attribute = type.GetCustomAttribute<MappingAttribute>();
 
-            return attribute?.Name;
-        }
-
-        private static T GetAttribute<T>(this MemberInfo type)
-        {
-            var attribute = Attribute.GetCustomAttribute(type, typeof(T));
-
-            if (attribute is T result)
-                return result;
-
-            return default;
+            return attribute?.Name ?? type.Name;
         }
     }
 }
